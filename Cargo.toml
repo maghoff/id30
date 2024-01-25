@@ -1,0 +1,37 @@
+[package]
+name = "id30"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rand08 = { package = "rand", version = "0.8.5", optional = true, default-features = false }
+
+[dev-dependencies]
+criterion = "0.5.1"
+
+[features]
+default = ["rand"]
+
+rand08 = ["dep:rand08"]
+rand08_std = ["rand08/std"]
+rand08_std_rng = ["rand08/std_rng"]
+rand = ["rand08"]
+
+unstable_portable_simd = []
+
+[[bin]]
+name = "id30"
+required-features = ["rand08", "rand08_std", "rand08_std_rng"]
+
+[profile.bench]
+lto = "fat"
+
+[[bench]]
+name = "display_bench"
+harness = false
+required-features = ["rand08", "rand08_std", "rand08_std_rng"]
+
+[[bench]]
+name = "parse_bench"
+harness = false
+required-features = ["rand08", "rand08_std", "rand08_std_rng"]
