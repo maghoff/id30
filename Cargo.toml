@@ -23,9 +23,6 @@ unstable_portable_simd = []
 name = "id30"
 required-features = ["rand08", "rand08_std", "rand08_std_rng"]
 
-[profile.bench]
-lto = "fat"
-
 [[bench]]
 name = "display_bench"
 harness = false
