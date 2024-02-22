@@ -77,5 +77,33 @@ fn main() {
     }
     writeln!(&mut out, "];").unwrap();
 
+    writeln!(&mut out, "pub(crate) const DECODE_LOW: [u8; 64] = [").unwrap();
+    for &x in &decode_table[0..64] {
+        if x == ERR_FLAG {
+            write!(&mut out, "    ERR_FLAG").unwrap();
+        } else {
+            write!(&mut out, "    {}", x & 0b1_1111).unwrap();
+            if x & ALT_FLAG != 0 {
+                write!(&mut out, " | ALT_FLAG").unwrap();
+            }
+        }
+        writeln!(&mut out, ",").unwrap();
+    }
+    writeln!(&mut out, "];").unwrap();
+
+    writeln!(&mut out, "pub(crate) const DECODE_HIGH: [u8; 64] = [").unwrap();
+    for &x in &decode_table[64..128] {
+        if x == ERR_FLAG {
+            write!(&mut out, "    ERR_FLAG").unwrap();
+        } else {
+            write!(&mut out, "    {}", x & 0b1_1111).unwrap();
+            if x & ALT_FLAG != 0 {
+                write!(&mut out, " | ALT_FLAG").unwrap();
+            }
+        }
+        writeln!(&mut out, ",").unwrap();
+    }
+    writeln!(&mut out, "];").unwrap();
+
     println!("cargo:rerun-if-changed=build.rs");
 }
