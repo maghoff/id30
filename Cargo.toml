@@ -18,6 +18,7 @@ rand08_std_rng = ["rand08/std_rng"]
 rand = ["rand08"]
 
 unstable_portable_simd = []
+unstable_stdarch_x86_avx512 = []
 
 [[bin]]
 name = "id30"

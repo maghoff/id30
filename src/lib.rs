@@ -1,6 +1,13 @@
 #![cfg_attr(
-    feature = "unstable_portable_simd",
-    feature(portable_simd, stdarch_x86_avx512)
+    any(
+        feature = "unstable_portable_simd",
+        feature = "unstable_stdarch_x86_avx512"
+    ),
+    feature(portable_simd)
+)]
+#![cfg_attr(
+    any(feature = "unstable_stdarch_x86_avx512"),
+    feature(stdarch_x86_avx512)
 )]
 
 mod codec_tables;
