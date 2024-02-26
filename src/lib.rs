@@ -27,6 +27,8 @@ mod from;
 mod from_str;
 mod rand;
 
+use std::fmt::Debug;
+
 pub use from::OutOfRangeError;
 pub use from_str::{Canonical, Id30Parse, ParseError};
 
@@ -35,7 +37,8 @@ pub use from_str::{Canonical, Id30Parse, ParseError};
 ///
 /// This type holds a 30 bit integer as a 32 bit integer, of which the two most
 /// significant bits are always zero. The type has the same representation as
-/// `u32`.
+/// `u32`. Debug-formatting includes both the Id30 encoding and the integer
+/// representation.
 ///
 /// Ordering, as implemented for the `PartialOrd` and `Ord` traits, orders by
 /// numerical value of the underlying integer. This is the same order as the
@@ -85,5 +88,14 @@ pub use from_str::{Canonical, Id30Parse, ParseError};
 /// assert_eq!(&format!("/path/to/{id}"), "/path/to/j9yceq");
 /// ```
 #[repr(transparent)]
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Copy, Clone)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Copy, Clone)]
 pub struct Id30(u32);
+
+impl Debug for Id30 {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Id30")
+            .field("id30", &self.to_string())
+            .field("u32", &self.0)
+            .finish()
+    }
+}
