@@ -7,7 +7,7 @@ pub struct OutOfRangeError;
 
 impl fmt::Display for OutOfRangeError {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
-        "out of range conversion to Id30 attempted".fmt(fmt)
+        "value out of range for Id30".fmt(fmt)
     }
 }
 

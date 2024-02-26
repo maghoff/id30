@@ -22,6 +22,7 @@
 //! of these trait implementations are opt-in via feature selection.
 
 mod codec_tables;
+mod diesel_support;
 mod display;
 mod from;
 mod from_str;
@@ -31,6 +32,11 @@ use std::fmt::Debug;
 
 pub use from::OutOfRangeError;
 pub use from_str::{Canonical, Id30Parse, ParseError};
+
+#[cfg(feature = "diesel2")]
+use diesel2 as diesel;
+#[cfg(feature = "diesel2")]
+use diesel2::sql_types::Integer;
 
 /// An implementation of the Id30 encoding scheme as documented at the [crate]
 /// root.
@@ -61,8 +67,6 @@ pub use from_str::{Canonical, Id30Parse, ParseError};
 ///  - With feature `rand`, via the [`Distribution`][rand08::distributions::Distribution]
 ///     trait:
 ///     ```rust
-///     # #[cfg(all(feature = "rand08", feature = "rand08_std", feature = "rand08_std_rng"))]
-///     # {
 ///     # use id30::Id30;
 ///     # use rand08 as rand;
 ///     use rand::{distributions::Standard, prelude::*};
@@ -70,7 +74,6 @@ pub use from_str::{Canonical, Id30Parse, ParseError};
 ///
 ///     let id: Id30 = rng.gen();
 ///     let ids: Vec<Id30> = Standard.sample_iter(rng).take(10).collect();
-///     # }
 ///     ```
 ///
 /// An `Id30` can be converted directly to `u32` and `i32` via the `From` trait:
@@ -89,6 +92,8 @@ pub use from_str::{Canonical, Id30Parse, ParseError};
 /// ```
 #[repr(transparent)]
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Copy, Clone)]
+#[cfg_attr(feature = "diesel2", derive(diesel::AsExpression, diesel::FromSqlRow))]
+#[cfg_attr(feature = "diesel2", diesel(sql_type = Integer))]
 pub struct Id30(u32);
 
 impl Debug for Id30 {

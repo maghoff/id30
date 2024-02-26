@@ -2,12 +2,27 @@
 name = "id30"
 version = "0.1.0"
 edition = "2021"
+resolver = "2"
+
+[package.metadata.docs.rs]
+features = ["diesel"]
 
 [dependencies]
-rand08 = { package = "rand", version = "0.8.5", optional = true, default-features = false }
+diesel2 = { package = "diesel", default-features = false, version = "2.0.0", optional = true, features = [
+    "with-deprecated",
+] }
+rand08 = { package = "rand", version = "0.8", optional = true, default-features = false }
+serde1 = { package = "serde", version = "1", optional = true, default-features = false }
 
 [dev-dependencies]
 criterion = "0.5.1"
+diesel2 = { package = "diesel", version = "2.0.0", default-features = false, features = [
+    "sqlite",
+] }
+libsqlite3-sys = { features = ["bundled"], version = ">=0.17.2" }
+rand08 = { package = "rand", version = "0.8.5" }
+serde1 = { package = "serde", version = "1", default-features = false }
+serde_test1 = { package = "serde_test", version = "1" }
 
 [features]
 default = ["rand"]
@@ -16,6 +31,9 @@ rand08 = ["dep:rand08"]
 rand08_std = ["rand08/std"]
 rand08_std_rng = ["rand08/std_rng"]
 rand = ["rand08"]
+
+diesel2 = ["dep:diesel2"]
+diesel = ["diesel2"]
 
 unstable_portable_simd = []
 unstable_stdarch_x86_avx512 = []
