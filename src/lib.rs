@@ -27,6 +27,7 @@ mod display;
 mod from;
 mod from_str;
 mod rand;
+mod serde_support;
 
 use std::fmt::Debug;
 

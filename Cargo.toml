@@ -35,6 +35,9 @@ rand = ["rand08"]
 diesel2 = ["dep:diesel2"]
 diesel = ["diesel2"]
 
+serde1 = ["dep:serde1"]
+serde = ["serde1"]
+
 unstable_portable_simd = []
 unstable_stdarch_x86_avx512 = []
 
