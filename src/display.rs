@@ -8,7 +8,7 @@ pub(crate) mod generic {
     use std::mem::MaybeUninit;
 
     #[allow(unused)]
-    pub fn fmt(id30: &Id30, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    pub fn with_str<T>(id30: &Id30, f: impl FnOnce(&str) -> T) -> T {
         let mut buf = [MaybeUninit::uninit(); 6];
 
         buf.iter_mut()
@@ -20,7 +20,7 @@ pub(crate) mod generic {
         // SAFETY:
         // - buf is utf8 because the ENCODE table is all ASCII
         // - transmute is safe because all elements have been initialized
-        f.write_str(unsafe { std::str::from_utf8_unchecked(std::mem::transmute(buf.as_slice())) })
+        f(unsafe { std::str::from_utf8_unchecked(std::mem::transmute(buf.as_slice())) })
     }
 }
 
@@ -31,7 +31,7 @@ pub(crate) mod avx512 {
     use std::simd::prelude::*;
 
     #[allow(unused)]
-    pub fn fmt(id30: &Id30, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    pub fn with_str<T>(id30: &Id30, f: impl FnOnce(&str) -> T) -> T {
         let x = u32x8::splat(id30.0);
         let shift = u32x8::from_array([25, 20, 15, 10, 5, 0, 30, 30]);
 
@@ -69,7 +69,7 @@ pub(crate) mod avx512 {
             );
         };
 
-        f.write_str(unsafe { std::str::from_utf8_unchecked(&buf[0..6]) })
+        f(unsafe { std::str::from_utf8_unchecked(&buf[0..6]) })
     }
 }
 
@@ -80,7 +80,7 @@ pub(crate) mod portable_simd {
     use std::simd::prelude::*;
 
     #[allow(unused)]
-    pub fn fmt(id30: &Id30, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    pub fn with_str<T>(id30: &Id30, f: impl FnOnce(&str) -> T) -> T {
         let x = u32x8::splat(id30.0);
         let shift = u32x8::from_array([25, 20, 15, 10, 5, 0, 30, 30]);
 
@@ -104,20 +104,24 @@ pub(crate) mod portable_simd {
 
         let buf = encoded.cast::<u8>().to_array();
 
-        f.write_str(unsafe { std::str::from_utf8_unchecked(&buf[0..6]) })
+        f(unsafe { std::str::from_utf8_unchecked(&buf[0..6]) })
     }
 }
 
+#[allow(unreachable_code)]
+fn with_str<T>(id30: &Id30, f: impl FnOnce(&str) -> T) -> T {
+    #[cfg(feature = "unstable_portable_simd")]
+    return portable_simd::with_str(id30, f);
+
+    #[cfg(feature = "unstable_stdarch_x86_avx512")]
+    return avx512::with_str(id30, f);
+
+    generic::with_str(id30, f)
+}
+
 impl Display for Id30 {
-    #[allow(unreachable_code)]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        #[cfg(feature = "unstable_portable_simd")]
-        return portable_simd::fmt(self, f);
-
-        #[cfg(feature = "unstable_stdarch_x86_avx512")]
-        return avx512::fmt(self, f);
-
-        generic::fmt(self, f)
+        with_str(self, move |id30_str| f.write_str(id30_str))
     }
 }
 
