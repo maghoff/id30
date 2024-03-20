@@ -1,6 +1,8 @@
 [package]
 name = "id30"
 version = "0.1.0"
+description = "An encoding scheme for 30 bit identifiers"
+license = "MIT OR Apache-2.0"
 edition = "2021"
 resolver = "2"
 
