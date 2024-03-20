@@ -2,6 +2,8 @@ use std::fmt;
 
 use super::Id30;
 
+/// The given value was out of range for an [`Id30`]. The valid range is
+/// `[0, 1 << 30)`.
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub struct OutOfRangeError;
 

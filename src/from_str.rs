@@ -1,24 +1,6 @@
 use std::str::FromStr;
 
-use crate::Id30;
-
-#[derive(Debug, PartialEq, Eq)]
-pub enum Canonical {
-    Canonical,
-    Alternate,
-}
-
-#[derive(Debug, PartialEq, Eq)]
-pub struct Id30Parse {
-    pub id30: Id30,
-    pub canonical: Canonical,
-}
-
-#[derive(Debug, PartialEq, Eq)]
-pub enum ParseError {
-    InvalidLength,
-    InvalidCharacters,
-}
+use crate::{Id30, Id30Parse, ParseError};
 
 mod generic {
     use crate::codec_tables::{ALT_MASK, DECODE, ERR_MASK};
@@ -45,11 +27,7 @@ mod generic {
             return Err(ParseError::InvalidCharacters);
         }
 
-        let canonical = if dec_u64 & ALT_MASK != 0 {
-            Canonical::Alternate
-        } else {
-            Canonical::Canonical
-        };
+        let is_canonical = dec_u64 & ALT_MASK == 0;
 
         let value = decoded
             .iter()
@@ -60,7 +38,7 @@ mod generic {
 
         Ok(Id30Parse {
             id30: Id30(value),
-            canonical,
+            is_canonical,
         })
     }
 }
@@ -111,11 +89,7 @@ mod avx512 {
             return Err(ParseError::InvalidCharacters);
         }
 
-        let canonical = if dec_u64 & ALT_MASK != 0 {
-            Canonical::Alternate
-        } else {
-            Canonical::Canonical
-        };
+        let is_canonical = dec_u64 & ALT_MASK == 0;
 
         let value = u8x8::from_array(decoded.to_array()[0..8].try_into().unwrap());
         let value: u32x8 = value.cast();
@@ -129,7 +103,7 @@ mod avx512 {
 
         Ok(Id30Parse {
             id30: Id30(value),
-            canonical,
+            is_canonical,
         })
     }
 }
@@ -183,11 +157,7 @@ mod portable_simd {
             return Err(ParseError::InvalidCharacters);
         }
 
-        let canonical = if dec_u64 & ALT_MASK != 0 {
-            Canonical::Alternate
-        } else {
-            Canonical::Canonical
-        };
+        let is_canonical = dec_u64 & ALT_MASK == 0;
 
         let value = u8x8::from_array(decoded.to_array()[0..8].try_into().unwrap());
         let value: u32x8 = value.cast();
@@ -201,7 +171,7 @@ mod portable_simd {
 
         Ok(Id30Parse {
             id30: Id30(value),
-            canonical,
+            is_canonical,
         })
     }
 }
@@ -245,7 +215,7 @@ mod test {
         assert_eq!("0oO0oO".parse(), Ok(Id30(0)));
         assert_eq!("1lLiI1".parse(), Ok(Id30(34636833)));
 
-        assert_eq!("00000u".parse::<Id30>(), Err(ParseError::InvalidCharacters));
+        assert_eq!("00000!".parse::<Id30>(), Err(ParseError::InvalidCharacters));
         assert_eq!("00000".parse::<Id30>(), Err(ParseError::InvalidLength));
         assert_eq!("0000000".parse::<Id30>(), Err(ParseError::InvalidLength));
     }
@@ -256,14 +226,14 @@ mod test {
             "000000".parse(),
             Ok(Id30Parse {
                 id30: Id30(0),
-                canonical: Canonical::Canonical
+                is_canonical: true
             })
         ));
         assert!(matches!(
             "00oo00".parse(),
             Ok(Id30Parse {
                 id30: Id30(0),
-                canonical: Canonical::Alternate
+                is_canonical: false
             })
         ));
     }

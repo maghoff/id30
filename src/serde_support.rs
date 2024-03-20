@@ -86,7 +86,7 @@ mod test {
         assert_de_tokens(
             &Id30Parse {
                 id30: Id30::try_from(0x3fff_ffff).unwrap(),
-                canonical: crate::Canonical::Canonical,
+                is_canonical: true,
             },
             &[Token::Str("zzzzzz")],
         );
@@ -94,7 +94,7 @@ mod test {
         assert_de_tokens(
             &Id30Parse {
                 id30: Id30::try_from(0x3fff_ffff).unwrap(),
-                canonical: crate::Canonical::Alternate,
+                is_canonical: false,
             },
             &[Token::Str("zzzZZZ")],
         );
