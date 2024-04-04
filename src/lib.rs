@@ -198,13 +198,15 @@ use diesel2::sql_types::Integer;
 /// assert_eq!(u32::from(id), 1234);
 /// ```
 ///
-/// `Id30` implements the `Display` trait:
-/// ```rust
-/// # use id30::Id30;
-/// let id: id30::Id30 = "j9yceq".parse().unwrap();
-/// assert_eq!(&id.to_string(), "j9yceq");
-/// assert_eq!(&format!("/path/to/{id}"), "/path/to/j9yceq");
-/// ```
+/// To generate the text representation:
+///  - format an `Id30` value via the `Display` trait:
+///     ```rust
+///     # use id30::Id30;
+///     let id: id30::Id30 = "j9yceq".parse().unwrap();
+///     assert_eq!(&id.to_string(), "j9yceq");
+///     assert_eq!(&format!("/path/to/{id}"), "/path/to/j9yceq");
+///     ```
+///  - or, with feature `serde`, via serialization
 ///
 /// # Integrations with other crates
 ///  - crate `rand` via feature `rand08` (alias `rand`):
