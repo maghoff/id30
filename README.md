@@ -1,0 +1,15 @@
+Id30 is an encoding scheme for 30 bit identifiers that look like the
+following: `bpv3uq`, `zvaec2`, `rfmbyz`, `jwygvk`, `000000`, `zzzzzz`. It is
+designed for use as opaque identifiers in URLs, that can be read and written
+comfortably.
+
+This repository is an implementation of Id30 in Rust as a library crate and a
+utility binary for easy conversion between Id30 strings and the corresponding
+integers.
+
+To use the library, add it as a dependency to your Rust project (`cargo add
+id30`) and read [the id30 documentation](https://docs.rs/id30/latest/id30/).
+
+To use the utility binary, build it from the source repository or install it
+from crates.io via cargo (`cargo install id30 --features=rand08_std`). Then, run
+`id30 --help` for more details.
