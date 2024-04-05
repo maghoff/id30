@@ -16,5 +16,5 @@ To use the library, add it as a dependency to your Rust project (`cargo add
 id30`) and read [the id30 documentation](https://docs.rs/id30/latest/id30/).
 
 To use the utility binary, build it from the source repository or install it
-from crates.io via cargo (`cargo install id30 --features=rand08_std`). Then, run
+from crates.io via cargo (`cargo install id30 --features=rand_std`). Then, run
 `id30 --help` for more details.

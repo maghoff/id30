@@ -30,7 +30,7 @@ serde_test1 = { package = "serde_test", version = "1" }
 default = ["rand"]
 
 rand08 = ["dep:rand08"]
-rand08_std = ["rand08/std", "rand08/std_rng"]
+rand_std = ["rand08/std", "rand08/std_rng"]
 rand = ["rand08"]
 
 diesel2 = ["dep:diesel2"]
@@ -44,14 +44,14 @@ unstable_stdarch_x86_avx512 = []
 
 [[bin]]
 name = "id30"
-required-features = ["rand08", "rand08_std"]
+required-features = ["rand08", "rand_std"]
 
 [[bench]]
 name = "display_bench"
 harness = false
-required-features = ["rand08", "rand08_std"]
+required-features = ["rand08", "rand_std"]
 
 [[bench]]
 name = "parse_bench"
 harness = false
-required-features = ["rand08", "rand08_std"]
+required-features = ["rand08", "rand_std"]

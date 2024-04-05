@@ -31,7 +31,7 @@
 //! [Features](#features) and [`Id30`] for details.
 //!
 //! The crate also provides a command line utility, installable with cargo
-//! (`cargo install id30 --features=rand08_std`), for converting between
+//! (`cargo install id30 --features=rand_std`), for converting between
 //! integral and Id30 representations, and for generating new IDs on the command
 //! line.
 //!
