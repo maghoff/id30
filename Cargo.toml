@@ -5,6 +5,8 @@ description = "An encoding scheme for 30 bit identifiers"
 license = "MIT OR Apache-2.0"
 edition = "2021"
 resolver = "2"
+documentation = "https://docs.rs/id30"
+repository = "https://github.com/maghoff/id30"
 
 [package.metadata.docs.rs]
 features = ["diesel", "serde"]
