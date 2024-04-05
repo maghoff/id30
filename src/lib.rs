@@ -14,7 +14,12 @@
 //! Id30 is an encoding scheme for 30 bit identifiers that look like the
 //! following: `bpv3uq`, `zvaec2`, `rfmbyz`, `jwygvk`, `000000`, `zzzzzz`. It is
 //! designed for use as opaque identifiers in URLs, that can be read and written
-//! comfortably.
+//! comfortably, and is a good choice for user-facing IDs when you don't need a
+//! key space of more than 30 bits, giving you just over 10⁹ different IDs. For
+//! comparison, YouTube surpassed this only in 2019, and is estimated to be
+//! hosting about 4*10⁹ videos in 2024. User-facing IDs should be chosen such
+//! that they do not reveal an underlying sequence, and, indeed, Id30 looks best
+//! for randomly generated IDs.
 //!
 //! In machine readable form, Id30 is represented as a 32 bit integer, of which
 //! the two most significant bits are always zero. This makes `u32` and `i32`
@@ -24,6 +29,11 @@
 //! through various traits. To avoid introducing excessive dependencies, several
 //! of these trait implementations are opt-in via feature selection, see
 //! [Features](#features) and [`Id30`] for details.
+//!
+//! The crate also provides a command line utility, installable with cargo
+//! (`cargo install id30 --features=rand08_std`), for converting between
+//! integral and Id30 representations, and for generating new IDs on the command
+//! line.
 //!
 //! # Id30 Encoding
 //! The Id30 encoding is a case-insensitive base 32 encoding that handles some
