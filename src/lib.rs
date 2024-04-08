@@ -1,15 +1,10 @@
-#![warn(missing_docs)]
-#![cfg_attr(
-    any(
-        feature = "unstable_portable_simd",
-        feature = "unstable_stdarch_x86_avx512"
-    ),
-    feature(portable_simd)
-)]
-#![cfg_attr(
-    any(feature = "unstable_stdarch_x86_avx512"),
-    feature(stdarch_x86_avx512)
-)]
+// Copyright 2024 Magnus Hovland Hoff.
+//
+// Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
+// https://www.apache.org/licenses/LICENSE-2.0> or the MIT license
+// <LICENSE-MIT or https://opensource.org/license/MIT>, at your
+// option. This file may not be copied, modified, or distributed
+// except according to those terms.
 
 //! Id30 is an encoding scheme for 30 bit identifiers that look like the
 //! following: `bpv3uq`, `zvaec2`, `rfmbyz`, `jwygvk`, `000000`, `zzzzzz`. It is
@@ -141,6 +136,19 @@
 //!  - `diesel2` (alias `diesel`), for integration with `diesel` 2.y.z
 //!
 //! See [`Id30`] for details about each integration.
+
+#![warn(missing_docs)]
+#![cfg_attr(
+    any(
+        feature = "unstable_portable_simd",
+        feature = "unstable_stdarch_x86_avx512"
+    ),
+    feature(portable_simd)
+)]
+#![cfg_attr(
+    any(feature = "unstable_stdarch_x86_avx512"),
+    feature(stdarch_x86_avx512)
+)]
 
 mod codec_tables;
 mod diesel_support;
