@@ -17,9 +17,9 @@
 //! comfortably, and is a good choice for user-facing IDs when you don't need a
 //! key space of more than 30 bits, giving you just over 10⁹ different IDs. For
 //! comparison, YouTube surpassed this only in 2019, and is estimated to be
-//! hosting about 4*10⁹ videos in 2024. User-facing IDs should be chosen such
-//! that they do not reveal an underlying sequence, and, indeed, Id30 looks best
-//! for randomly generated IDs.
+//! hosting about 4*10⁹ videos in 2024. User-facing IDs should generally be
+//! chosen such that they do not reveal an underlying sequence, and, indeed,
+//! Id30 looks best for randomly generated IDs.
 //!
 //! In machine readable form, Id30 is represented as a 32 bit integer, of which
 //! the two most significant bits are always zero. This makes `u32` and `i32`
